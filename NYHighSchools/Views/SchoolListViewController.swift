@@ -12,6 +12,7 @@ protocol SchoolListViewModelProtocol {
     var schools: [SchoolModel] { get }
     var schoolsPublisher: PassthroughSubject<CollectionDifference<SchoolModel>, Never> { get }
     func loadMoreSchools()
+    func selected(school: SchoolModel)
 }
 
 class SchoolListViewController<Model: SchoolListViewModelProtocol>: UIViewController, UITableViewDelegate {
@@ -91,13 +92,15 @@ class SchoolListViewController<Model: SchoolListViewModelProtocol>: UIViewContro
         viewModel.loadMoreSchools()
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.schools.count
-    }
-    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row > viewModel.schools.count - 5 {
             viewModel.loadMoreSchools()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let school = viewModel.schools[indexPath.row]
+        viewModel.selected(school: school)
     }
 }

@@ -16,6 +16,8 @@ The coordinator is the class that handles the navigation and configuration of Vi
 
 ## Other
 
+Added pagination and name sorting for the Schools list to optimize UX
+
 Combine used between View and ViewModel, however, delegates or closures can be used for the same purpose. Combine gives easy SwiftUI migration in the future.
 
 Dependency injection with generics will allow to mock DataProvider or ViewModel and assign a custom viewModel to SwiftUI preview in the future or use a mock object for various testing purposes.

@@ -9,10 +9,10 @@ import UIKit
 import Combine
 
 protocol SchoolListViewModelProtocol {
-    var schools: [SchoolModel] { get }
-    var schoolsPublisher: PassthroughSubject<CollectionDifference<SchoolModel>, Never> { get }
-    func loadMoreSchools()
-    func selected(school: SchoolModel)
+    var schoolsPublisher: PassthroughSubject<CollectionDifference<String>, Never> { get }
+    func viewControllerDidLoadView()
+    func viewControllerDidShow(itemAt index: Int)
+    func viewControllerDidSelect(itemAt index: Int)
 }
 
 class SchoolListViewController<Model: SchoolListViewModelProtocol>: UIViewController, UITableViewDelegate {
@@ -32,11 +32,11 @@ class SchoolListViewController<Model: SchoolListViewModelProtocol>: UIViewContro
         return tableView
     }()
     
-    private lazy var dataSource: UITableViewDiffableDataSource<SchoolListSection, SchoolModel> = {
-        let dataSource = UITableViewDiffableDataSource<SchoolListSection, SchoolModel>(tableView: tableView, cellProvider: { [weak self] (tableView, indexPath, school) in
+    private lazy var dataSource: UITableViewDiffableDataSource<SchoolListSection, String> = {
+        let dataSource = UITableViewDiffableDataSource<SchoolListSection, String>(tableView: tableView, cellProvider: { [weak self] (tableView, indexPath, school) in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.defaultReuseIdentifier) else { return UITableViewCell() }
             
-            cell.textLabel?.text = school.school_name
+            cell.textLabel?.text = school
             cell.textLabel?.numberOfLines = 0
             return cell
         })
@@ -89,18 +89,15 @@ class SchoolListViewController<Model: SchoolListViewModelProtocol>: UIViewContro
         }
         .store(in: &cancellables)
         
-        viewModel.loadMoreSchools()
+        viewModel.viewControllerDidLoadView()
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row > viewModel.schools.count - 5 {
-            viewModel.loadMoreSchools()
-        }
+        viewModel.viewControllerDidShow(itemAt: indexPath.row)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let school = viewModel.schools[indexPath.row]
-        viewModel.selected(school: school)
+        viewModel.viewControllerDidSelect(itemAt: indexPath.row)
     }
 }

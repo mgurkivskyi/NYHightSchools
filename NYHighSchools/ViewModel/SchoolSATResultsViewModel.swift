@@ -56,4 +56,8 @@ extension SchoolSATResultsViewModel: SchoolSATResultsViewModelProtocol {
     var satMathAvgScorePublisher: Published<String?>.Publisher { $satMathAvgScore }
     var satWritingAvgScorePublisher: Published<String?>.Publisher { $satWritingAvgScore }
     var noDataPublisher: Published<Bool>.Publisher { $noData }
+
+    func viewControllerDidLoadView() {
+        loadSAT()
+    }
 }

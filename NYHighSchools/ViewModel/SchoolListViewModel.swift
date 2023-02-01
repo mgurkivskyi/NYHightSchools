@@ -17,28 +17,33 @@ protocol SchoolListViewModelNavigationDelegate: AnyObject {
 }
 
 class SchoolListViewModel<DataSource: SchoolListViewModelDataSourceProtocol>: SchoolListViewModelProtocol {
+    
     let dataSource: DataSource
     weak var navigationDelegate: SchoolListViewModelNavigationDelegate?
     
-    @Published var schools: [SchoolModel] = []
-    var schoolsPublisher = PassthroughSubject<CollectionDifference<SchoolModel>, Never>()
-    
+    private var schoolsModels: [SchoolModel] = []
+    private var schools: [String] = []
+    var schoolsPublisher = PassthroughSubject<CollectionDifference<String>, Never>()
+
     private var isLoading = false
     private let itemsPerPage: UInt = 50
     private var allLoaded = false
     
-    func loadMoreSchools() {
+    private func loadMoreSchools() {
         guard !isLoading && !allLoaded else { return }
         
         isLoading = true
         dataSource.loadSchools(offset: UInt(schools.count), limit: itemsPerPage) { [weak self] schools in
             guard let self = self else { return }
-            let oldSchoold = self.schools
-            self.schools.append(contentsOf: schools)
             self.isLoading = false
             self.allLoaded = schools.count == 0
+
+            let oldSchoolNames = self.schools
             
-            self.schoolsPublisher.send(self.schools.difference(from: oldSchoold))
+            self.schoolsModels.append(contentsOf: schools)
+            self.schools.append(contentsOf: schools.map({ $0.school_name }))
+            
+            self.schoolsPublisher.send(self.schools.difference(from: oldSchoolNames))
         }
     }
     
@@ -46,7 +51,18 @@ class SchoolListViewModel<DataSource: SchoolListViewModelDataSourceProtocol>: Sc
         self.dataSource = dataSource
     }
     
-    func selected(school: SchoolModel) {
+    func viewControllerDidLoadView() {
+        loadMoreSchools()
+    }
+    
+    func viewControllerDidShow(itemAt index: Int) {
+        if index > schools.count - 5 {
+            loadMoreSchools()
+        }
+    }
+    
+    func viewControllerDidSelect(itemAt index: Int) {
+        let school = schoolsModels[index]
         navigationDelegate?.schoolList(didSelect: school)
     }
 }

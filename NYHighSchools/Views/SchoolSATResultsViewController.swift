@@ -17,7 +17,7 @@ protocol SchoolSATResultsViewModelProtocol {
     var satMathAvgScorePublisher: Published<String?>.Publisher { get }
     var satWritingAvgScorePublisher: Published<String?>.Publisher { get }
     
-    func loadSAT()
+    func viewControllerDidLoadView()
 }
 
 class SchoolSATResultsViewController<Model: SchoolSATResultsViewModelProtocol>: UIViewController {
@@ -172,6 +172,6 @@ class SchoolSATResultsViewController<Model: SchoolSATResultsViewModelProtocol>: 
             }
             .store(in: &cancellables)
         
-        viewModel.loadSAT()
+        viewModel.viewControllerDidLoadView()
     }
 }

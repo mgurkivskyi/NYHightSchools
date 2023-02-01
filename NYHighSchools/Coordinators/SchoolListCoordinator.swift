@@ -10,14 +10,14 @@ import UIKit
 class SchoolListCoordinator: Coordinator {
     var parentCoordinator: (any Coordinator)?
     var childrenCoordinator: (any Coordinator)?
-    var viewController: SchoolListViewController<SchoolListViewModel<API>>
+    var viewController: SchoolListViewController<SchoolListViewModel<APIDataProvider>>
 
     private var navigationController: UINavigationController
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
 
-        let viewModel = SchoolListViewModel(dataSource: API())
+        let viewModel = SchoolListViewModel(dataSource: APIDataProvider())
         viewController = SchoolListViewController(viewModel: viewModel)
         
         viewModel.navigationDelegate = self

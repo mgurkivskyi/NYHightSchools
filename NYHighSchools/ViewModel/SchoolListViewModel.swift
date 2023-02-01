@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-protocol SchoolListViewModelDataSourceProtocol {
+protocol SchoolListViewModelDataProviderProtocol {
     func loadSchools(offset: UInt, limit: UInt, completion: @escaping ([SchoolModel])->())
 }
 
@@ -16,7 +16,7 @@ protocol SchoolListViewModelNavigationDelegate: AnyObject {
     func schoolList(didSelect school: SchoolModel)
 }
 
-class SchoolListViewModel<DataSource: SchoolListViewModelDataSourceProtocol>: SchoolListViewModelProtocol {
+class SchoolListViewModel<DataSource: SchoolListViewModelDataProviderProtocol>: SchoolListViewModelProtocol {
     
     let dataSource: DataSource
     weak var navigationDelegate: SchoolListViewModelNavigationDelegate?

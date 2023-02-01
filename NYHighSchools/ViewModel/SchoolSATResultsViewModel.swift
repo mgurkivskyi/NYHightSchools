@@ -8,11 +8,11 @@
 import Foundation
 import Combine
 
-protocol SchoolSATResultsViewModelDataSourceProtocol {
+protocol SchoolSATResultsViewModelDataProviderProtocol {
     func loadSAT(for school: SchoolModel, completion: @escaping (SchoolSATModel?)->())
 }
 
-class SchoolSATResultsViewModel<DataSource: SchoolSATResultsViewModelDataSourceProtocol> {
+class SchoolSATResultsViewModel<DataSource: SchoolSATResultsViewModelDataProviderProtocol> {
     let dataSource: DataSource
     var school: SchoolModel
 

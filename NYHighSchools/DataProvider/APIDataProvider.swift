@@ -1,5 +1,5 @@
 //
-//  API.swift
+//  APIDataProvider.swift
 //  NYHighSchools
 //
 //  Created by Maksym Gurkivskyi on 1/31/23.
@@ -8,9 +8,9 @@
 import Foundation
 
 // TODO: Add error handling
-class API {}
+class APIDataProvider {}
 
-extension API: SchoolListViewModelDataSourceProtocol {
+extension APIDataProvider: SchoolListViewModelDataProviderProtocol {
     
     func loadSchools(offset: UInt, limit: UInt, completion: @escaping ([SchoolModel])->()) {
         guard var components = URLComponents(string: "https://data.cityofnewyork.us/resource/s3k6-pzi2.json") else { return }
@@ -36,7 +36,7 @@ extension API: SchoolListViewModelDataSourceProtocol {
     }
 }
 
-extension API: SchoolSATResultsViewModelDataSourceProtocol {
+extension APIDataProvider: SchoolSATResultsViewModelDataProviderProtocol {
     
     func loadSAT(for school: SchoolModel, completion: @escaping (SchoolSATModel?)->()) {
         guard var components = URLComponents(string: "https://data.cityofnewyork.us/resource/f9bf-2cp4.json") else { return }

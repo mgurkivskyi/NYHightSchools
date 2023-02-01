@@ -25,3 +25,4 @@ Dependency injection with generics will allow to mock DataProvider or ViewModel 
 1. Add better API error handling
 2. Add a spinner for pagination loading
 3. Add unit tests
+4. Use better formatting for model's properties

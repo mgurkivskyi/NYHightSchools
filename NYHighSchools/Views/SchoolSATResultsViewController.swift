@@ -106,8 +106,9 @@ class SchoolSATResultsViewController<Model: SchoolSATResultsViewModelProtocol>: 
         
         verticalContainer.addArrangedSubview(nameLabel)
         verticalContainer.addArrangedSubview(activityView)
+        verticalContainer.addArrangedSubview(noDataAvailableLabel)
         
-        for label in [noDataAvailableLabel, numOfSatTestTakersLabel, satCriticalReadingAvgScoreLabel, satMathAvgScoreLabel, satWritingAvgScoreLabel] {
+        for label in [numOfSatTestTakersLabel, satCriticalReadingAvgScoreLabel, satMathAvgScoreLabel, satWritingAvgScoreLabel] {
             label.isHidden = true
             verticalContainer.addArrangedSubview(label)
         }

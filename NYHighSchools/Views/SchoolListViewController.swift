@@ -69,12 +69,14 @@ class SchoolListViewController<Model: SchoolListViewModelProtocol>: UIViewContro
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
+        // Add main section
         var snapshot = dataSource.snapshot()
         snapshot.appendSections([.items])
         dataSource.apply(snapshot)
         
         viewModel.schoolsPublisher.sink { [weak self] difference in
             guard let self = self else { return }
+            // TODO: implement items removal as well
             let insertions = difference.insertions.compactMap({ change in
                 if case .insert(_, let element, _ ) = change {
                     return element
@@ -82,9 +84,9 @@ class SchoolListViewController<Model: SchoolListViewModelProtocol>: UIViewContro
                 return nil
             })
             
+            // Update dataSource with new items:
             var snapshot = self.dataSource.snapshot()
             snapshot.appendItems(insertions, toSection: .items)
-
             self.dataSource.apply(snapshot, animatingDifferences: true)
         }
         .store(in: &cancellables)
